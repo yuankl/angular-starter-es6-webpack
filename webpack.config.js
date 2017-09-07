@@ -2,6 +2,8 @@ var webpack = require('webpack');
 var nodeEnvironment = process.env.NODE_ENV
 var bourbon = require('node-bourbon').includePaths;
 var _ = require('lodash');
+var path = require('path');
+var sassLoader = 'style!css?modules&importLoaders=1&localIdentName=[path]___[name]__[local]___[hash:base64:5]!sass?sourceMap=true&sourceMapContents=true';
 
 var config = {
   context: __dirname + '/app',
@@ -22,6 +24,7 @@ var config = {
     filename: 'bundle.js'
   },
   resolve: {
+    extensions: ['', '.js', '.es6', '.scss'],
     root: __dirname + '/app'
   },
   jscs: {
@@ -43,7 +46,13 @@ var config = {
     loaders: [
       {test: /\.js$/, exclude: /(node_modules)/, loader: 'babel'},
       {test: /\.html/, exclude: /(node_modules)/, loader: 'html-loader'},
-      {test: /\.s?css$/, loader: 'style!css!sass?includePaths[]=' + bourbon },
+      {
+        test: /\.scss$/,
+        include: [
+          path.resolve(__dirname, 'css'),
+        ],
+        loader: sassLoader
+      },
       {test: /\.(png|jpg)$/, loader: 'url-loader?mimetype=image/png'}
     ]
   }
